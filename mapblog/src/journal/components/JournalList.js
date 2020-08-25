@@ -1,5 +1,7 @@
 import React from "react";
 
+import JournalItem from "../components/JournalItem";
+
 const JournalList = (props) => {
   if (props.items.length === 0) {
     return (
@@ -8,7 +10,7 @@ const JournalList = (props) => {
       </div>
     );
   }
-  /*
+
   return (
     <ul>
       {props.items.map((journ) => (
@@ -20,7 +22,7 @@ const JournalList = (props) => {
         />
       ))}
     </ul>
-  );*/
+  );
 };
 
 export default JournalList;

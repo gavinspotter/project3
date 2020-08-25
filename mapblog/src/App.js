@@ -8,6 +8,7 @@ import {
 
 import Users from "./user/pages/Users";
 import NewPlace from "./places/pages/NewPlace";
+import Journal from "./journal/pages/Journal";
 
 const App = () => {
   return (

@@ -19,6 +19,9 @@ const App = () => {
         <Route path="/places/new" exact>
           <NewPlace />
         </Route>
+        <Route path="/journal" exact>
+          <Journal />
+        </Route>
         <Redirect to="/" />
       </Switch>
     </Router>

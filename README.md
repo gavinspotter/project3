@@ -4,6 +4,8 @@
 
 npm install --save react-router-dom@5 --save-exact
 
+npm install --save react-transition-group
+
 ##### note mapblog/src/App.js
 
 import React from "react";
@@ -71,6 +73,7 @@ import "./UserItem.css";
 
 const UserItem = (props) => {
 return (
+
 <li className="user-item">
 <Card className="user-item__content">
 <Link to={`/${props.id}/places`}>
@@ -92,3 +95,43 @@ return (
 export default UserItem;
 
 ##### link component gives react router dom a chance to render a link so we dont have to reload the page when we follower a certain link. basically serves as an anchor tag that prevents the page from reloading
+
+##### note ./src/shared/components/navigation/MainNavigation
+
+import React from "react";
+import { Link } from "react-router-dom";
+
+import MainHeader from "./MainHeader";
+import NavLinks from "./NavLinks";
+import SideDrawer from "./SideDrawer";
+import "./MainNavigation.css";
+
+const MainNavigation = (props) => {
+return (
+<React.Fragment>
+<SideDrawer>
+
+<nav className="main-navigation__drawer-nav">
+<NavLinks />
+</nav>
+</SideDrawer>
+<MainHeader>
+<button className="main-navigation__menu-btn">
+<span />
+<span />
+<span />
+</button>
+<h1 className="main-navigation__title">
+<Link to="/">Your Places</Link>
+</h1>
+<nav className="main-navigation__header-nav">
+<NavLinks />
+</nav>
+</MainHeader>
+</React.Fragment>
+);
+};
+
+export default MainNavigation;
+
+##### <React.Fragment> allows us to have two components with prop.children side by side

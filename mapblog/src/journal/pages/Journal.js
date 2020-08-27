@@ -1,17 +1,28 @@
 import React from "react";
 
+import { useParams } from "react-router-dom";
+
 import JournalList from "../components/JournalList";
 
+const JOURNAL = [
+  {
+    id: "j1",
+    date: "aug 25",
+    entry: "my first journal entry",
+    creator: "u1",
+  },
+  {
+    id: "j1",
+    date: "aug 25",
+    entry: "my first journal entry",
+    creator: "u2",
+  },
+];
 const Journal = () => {
-  const JOURNAL = [
-    {
-      id: "j1",
-      date: "aug 25",
-      entry: "my first journal entry",
-    },
-  ];
+  const userId = useParams().userId;
+  const loadedEntrys = JOURNAL.filter((piece) => piece.creator === userId);
 
-  return <JournalList items={JOURNAL} />;
+  return <JournalList items={loadedEntrys} />;
 };
 
 export default Journal;

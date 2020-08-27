@@ -10,6 +10,7 @@ import Users from "./user/pages/Users";
 import NewPlace from "./places/pages/NewPlace";
 import UserPlaces from "./places/pages/UserPlaces";
 import Journal from "./journal/pages/Journal";
+import NewEntry from "./journal/pages/NewEntry";
 import MainNavigation from "./shared/components/navigation/MainNavigation";
 
 const App = () => {
@@ -27,8 +28,11 @@ const App = () => {
           <Route path="/places/new" exact>
             <NewPlace />
           </Route>
-          <Route path="/journal" exact>
+          <Route path="/:userId/journal" exact>
             <Journal />
+          </Route>
+          <Route>
+            <NewEntry path="/journal/new" />
           </Route>
           <Redirect to="/" />
         </Switch>

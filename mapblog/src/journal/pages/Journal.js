@@ -17,6 +17,12 @@ const JOURNAL = [
     entry: "my first journal entry",
     creator: "u2",
   },
+  {
+    id: "j1",
+    date: "aug 25",
+    entry: "my second journal entry",
+    creator: "u1",
+  },
 ];
 const Journal = () => {
   const userId = useParams().userId;

@@ -8,6 +8,7 @@ npm install --save react-transition-group
 
 ##### note mapblog/src/App.js
 
+```
 import React from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
@@ -25,11 +26,11 @@ return (
 };
 
 export default App;
-
+```
 ##### <Route> must be used inside of router
 
 ##### note mapblog/src/App.js
-
+```
 import React from "react";
 import {
 BrowserRouter as Router,
@@ -58,11 +59,11 @@ return (
 };
 
 export default App;
-
+```
 ##### App function is run straight down. wrap route's w redirect in switch component to keep redirect from running
 
 ##### note ./src/user/components/UserItem
-
+```
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -93,11 +94,11 @@ return (
 };
 
 export default UserItem;
-
+```
 ##### link component gives react router dom a chance to render a link so we dont have to reload the page when we follower a certain link. basically serves as an anchor tag that prevents the page from reloading
 
 ##### note ./src/shared/components/navigation/MainNavigation
-
+```
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -133,5 +134,45 @@ return (
 };
 
 export default MainNavigation;
-
+```
 ##### <React.Fragment> allows us to have two components with prop.children side by side
+
+
+
+# Map Blog Project
+
+#### mapblog/src/shared/components/navigation/NavLinks.js
+
+``` <NavLink><NavLink/> ```
+
+is imported from "react-router-dom" by NavLink
+
+component utilizes props.children. it has a to prop which serves as the link rendered when the app is built. 
+
+Only rendered if logged in 
+
+- my places 
+- add place 
+- add journal entry 
+- my journal entry
+  
+Rendered if not logged in 
+
+- authenticate 
+  
+``` <NavLink to="/" exact> ```
+
+the exact is import as we dont want the following links to default to that particular link
+
+
+#### mapblog/src/shared/components/UIElements/Backdrop.js mapblog/src/shared/components/navigation/MainNavigation.js mapblog/src/shared/components/SideDrawer.js
+
+SideDraw.js along with Backdrop.js use react portals from ReactDom to be rendered to the page. 
+
+SideDrawer.js uses CSSTransition to create an instance of mounting the side draw or sliding it in and out
+
+the SideDrawer component and MainHeader component are wrapped in React.Fragment
+
+MainNavigation uses the useState hook to manipulate the side draw from open to close. 
+
+

@@ -12,7 +12,11 @@ import UserPlaces from "./places/pages/UserPlaces";
 import Journal from "./journal/pages/Journal";
 import NewEntry from "./journal/pages/NewEntry";
 import MainNavigation from "./shared/components/navigation/MainNavigation";
-import ChangeHeader from "./themes/Changeheader";
+import UpdatePlace from "./places/pages/UpdatePlace";
+import Blog from "./blog/pages/Blog";
+import NewBlog from "./blog/pages/NewBlog";
+import UpdateEntry from "./journal/pages/UpdateEntry";
+import UpdateBlog from "./blog/pages/UpdateBlog";
 
 const App = () => {
   return (
@@ -29,15 +33,28 @@ const App = () => {
           <Route path="/places/new" exact>
             <NewPlace />
           </Route>
+          <Route path="/places/:placeId">
+            <UpdatePlace />
+          </Route>
           <Route path="/:userId/journal" exact>
             <Journal />
           </Route>
-          <Route>
-            <NewEntry path="/journal/new" exact />
+          <Route path="/journal/new" exact>
+            <NewEntry />
           </Route>
-          <Route>
-            <ChangeHeader path="/themes" exact />
+          <Route path="/journal/:journalId">
+            <UpdateEntry />
           </Route>
+          <Route path="/:userId/blog" exact>
+            <Blog />
+          </Route>
+          <Route path="/blog/new" exact>
+            <NewBlog />
+          </Route>
+          <Route path="/blog/:blogId">
+            <UpdateBlog />
+          </Route>
+
           <Redirect to="/" />
         </Switch>
       </main>

@@ -17,14 +17,18 @@ const NavLinks = (props) => {
       <li>
         <NavLink to="/places/new">ADD PLACE</NavLink>
       </li>
-      <li>
-        <NavLink to="/journal/new">ADD JOURNAL ENTRY</NavLink>
-      </li>
+
       <li>
         <NavLink to="/u1/journal">MY JOURNAL ENTRYS</NavLink>
       </li>
       <li>
-        <NavLink to="/themes">THEME</NavLink>
+        <NavLink to="/journal/new">ADD JOURNAL ENTRY</NavLink>
+      </li>
+      <li>
+        <NavLink to="/ra/blog">MY BLOG</NavLink>
+      </li>
+      <li>
+        <NavLink to="/blog/new">ADD BLOG POST</NavLink>
       </li>
       <li>
         <NavLink to="/auth">AUTHENTICATE</NavLink>

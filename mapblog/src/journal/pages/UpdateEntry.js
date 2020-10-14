@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
+
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
 } from "../../shared/util/validators";
+import { useForm } from "../../shared/hooks/form-hook";
+import "./JournalForm.css";
+import Card from "../../shared/components/UIElements/Card";
 const JOURNAL = [
   {
     id: "j1",
@@ -28,41 +32,93 @@ const JOURNAL = [
 ];
 
 const UpdateEntry = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   const journalId = useParams().journalId;
+
+  const [formState, inputHandler, setFormData] = useForm(
+    {
+      title: {
+        value: "",
+        isValid: false,
+      },
+      description: {
+        value: "",
+        isValid: false,
+      },
+    },
+    false
+  );
+
   const identifiedJournal = JOURNAL.find((j) => j.id === journalId);
+
+  useEffect(() => {
+    if (identifiedJournal) {
+      setFormData(
+        {
+          title: {
+            value: identifiedJournal.entry,
+            isValid: true,
+          },
+          description: {
+            value: identifiedJournal.date,
+            isValid: true,
+          },
+        },
+        true
+      );
+    }
+
+    setIsLoading(false);
+  }, [setFormData, identifiedJournal]);
+
+  const journalUpdateSubmitHandler = (event) => {
+    event.preventDefault();
+    console.log(formState.inputs);
+  };
 
   if (!identifiedJournal) {
     return (
       <div>
-        <h2> could not find place </h2>
+        <Card>
+          <h2> could not find entry</h2>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div>
+        <Card>
+          <h2> loading</h2>
+        </Card>
       </div>
     );
   }
 
   return (
-    <form>
+    <form className="journal-form" onSubmit={journalUpdateSubmitHandler}>
       <Input
-        id="entry"
         element="textarea"
         label="journal entry"
         validators={[VALIDATOR_REQUIRE()]}
         errorText="enter valid journal entry"
-        onInput={() => {}}
-        value={identifiedJournal.entry}
-        valid={true}
+        onInput={inputHandler}
+        initialValue={formState.inputs.title.value}
+        initialValid={formState.inputs.title.isValid}
       />
       <Input
-        id="date"
         element="input"
         type="text"
         label="date"
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="enter valid date"
-        onInput={() => {}}
-        value={identifiedJournal.date}
-        valid={true}
+        onInput={inputHandler}
+        initialValue={formState.inputs.description.value}
+        initialValid={formState.inputs.description.isValid}
       />
-      <Button type="submit" disabled={true}>
+      <Button type="submit" disabled={!formState.isValid}>
         update journal{" "}
       </Button>
     </form>

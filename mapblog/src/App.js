@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -17,48 +17,84 @@ import Blog from "./blog/pages/Blog";
 import NewBlog from "./blog/pages/NewBlog";
 import UpdateEntry from "./journal/pages/UpdateEntry";
 import UpdateBlog from "./blog/pages/UpdateBlog";
+import Auth from "./user/pages/Auth";
+import { AuthContext } from "./shared/context/auth-context";
 
 const App = () => {
-  return (
-    <Router>
-      <MainNavigation />
-      <main>
-        <Switch>
-          <Route path="/" exact>
-            <Users />
-          </Route>
-          <Route path="/:userId/places" exact>
-            <UserPlaces />
-          </Route>
-          <Route path="/places/new" exact>
-            <NewPlace />
-          </Route>
-          <Route path="/places/:placeId">
-            <UpdatePlace />
-          </Route>
-          <Route path="/:userId/journal" exact>
-            <Journal />
-          </Route>
-          <Route path="/journal/new" exact>
-            <NewEntry />
-          </Route>
-          <Route path="/journal/:journalId">
-            <UpdateEntry />
-          </Route>
-          <Route path="/:userId/blog" exact>
-            <Blog />
-          </Route>
-          <Route path="/blog/new" exact>
-            <NewBlog />
-          </Route>
-          <Route path="/blog/:blogId">
-            <UpdateBlog />
-          </Route>
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-          <Redirect to="/" />
-        </Switch>
-      </main>
-    </Router>
+  const login = useCallback(() => {
+    setIsLoggedIn(true);
+  }, []);
+
+  const logout = useCallback(() => {
+    setIsLoggedIn(false);
+  }, []);
+
+  let routes;
+
+  if (isLoggedIn) {
+    routes = (
+      <Switch>
+        <Route path="/" exact>
+          <Users />
+        </Route>
+        <Route path="/:userId/places" exact>
+          <UserPlaces />
+        </Route>
+        <Route path="/places/new" exact>
+          <NewPlace />
+        </Route>
+        <Route path="/places/:placeId">
+          <UpdatePlace />
+        </Route>
+        <Route path="/:userId/journal" exact>
+          <Journal />
+        </Route>
+        <Route path="/journal/new" exact>
+          <NewEntry />
+        </Route>
+        <Route path="/journal/:journalId">
+          <UpdateEntry />
+        </Route>
+        <Route path="/:userId/blog" exact>
+          <Blog />
+        </Route>
+        <Route path="/blog/new" exact>
+          <NewBlog />
+        </Route>
+        <Route path="/blog/:blogId">
+          <UpdateBlog />
+        </Route>
+        <Redirect to="/" />
+      </Switch>
+    );
+  } else {
+    routes = (
+      <Switch>
+        <Route path="/" exact>
+          <Users />
+        </Route>
+        <Route path="/:userId/places" exact>
+          <UserPlaces />
+        </Route>
+        <Route path="/auth">
+          <Auth />
+        </Route>
+        <Redirect to="/auth" />
+      </Switch>
+    );
+  }
+
+  return (
+    <AuthContext.Provider
+      value={{ isLoggedIn: isLoggedIn, login: login, logout: logout }}
+    >
+      <Router>
+        <MainNavigation />
+        <main>{routes}</main>
+      </Router>
+    </AuthContext.Provider>
   );
 };
 

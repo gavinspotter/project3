@@ -1,46 +1,30 @@
-import React, { useCallback, useReducer } from "react";
+import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
 
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
+
 import {
   VALIDATOR_REQUIRE,
-  VALIDATOR_MIN,
   VALIDATOR_MINLENGTH,
 } from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/form-hook";
-
-const formReducer = (state, action) => {
-  switch (action.type) {
-    case "INPUT_CHANGE":
-      let formIsValid = true;
-      for (const inputId in state.inputs) {
-        if (inputId === action.inputId) {
-          formIsValid = formIsValid && action.isValid;
-        } else {
-          formIsValid = formIsValid && state.inputs[inputId].isValid;
-        }
-      }
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          [action.inputId]: { value: action.value, isValid: action.isValid },
-        },
-        isValid: formIsValid,
-      };
-    default:
-      return state;
-  }
-};
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import { AuthContext } from "../../shared/context/auth-context";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
 const NewEntry = () => {
+  const auth = useContext(AuthContext);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
   const [formState, inputHandler] = useForm(
     {
-      title: {
+      date: {
         value: "",
         isValid: false,
       },
-      description: {
+      entry: {
         value: "",
         isValid: false,
       },
@@ -48,34 +32,52 @@ const NewEntry = () => {
     false
   );
 
-  const journalSubmitHandler = (event) => {
+  const history = useHistory();
+
+  const journalSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(formState.inputs);
+    try {
+      await sendRequest(
+        "http://localhost:5000/api/journal",
+        "POST",
+        JSON.stringify({
+          date: formState.inputs.date.value,
+          entry: formState.inputs.entry.value,
+          creator: auth.userId,
+        }),
+        { "Content-Type": "application/json" }
+      );
+      history.push("/");
+    } catch (err) {}
   };
 
   return (
-    <form className="place-form" onSubmit={journalSubmitHandler}>
-      <Input
-        id="title"
-        element="input"
-        type="text"
-        label="Title"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="please enter a valid title"
-        onInput={inputHandler}
-      />
-      <Input
-        id="description"
-        element="textarea"
-        label="description"
-        validators={[VALIDATOR_MINLENGTH(5)]}
-        errorText="please enter a valid description (5 characters)"
-        onInput={inputHandler}
-      />
-      <Button type="submit" disabled={!formState.isValid}>
-        add entry
-      </Button>
-    </form>
+    <React.Fragment>
+      <ErrorModal error={error} onClear={clearError} />
+      <form className="place-form" onSubmit={journalSubmitHandler}>
+        {isLoading && <LoadingSpinner asOverlay />}
+        <Input
+          id="date"
+          element="input"
+          type="text"
+          label="date"
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText="please enter a valid title"
+          onInput={inputHandler}
+        />
+        <Input
+          id="entry"
+          element="textarea"
+          label="entry"
+          validators={[VALIDATOR_MINLENGTH(5)]}
+          errorText="please enter a valid description (5 characters)"
+          onInput={inputHandler}
+        />
+        <Button type="submit" disabled={!formState.isValid}>
+          add entry
+        </Button>
+      </form>
+    </React.Fragment>
   );
 };
 
